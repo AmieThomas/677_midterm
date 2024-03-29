@@ -1,0 +1,55 @@
+---
+title: "677_midterm"
+author: "Amie Thomas"
+date: "2024-03-29"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Marchov chain
+```{r}
+
+
+transition_matrix <- matrix(c(0.8, 0.2,   
+                               0.3, 0.7),  
+                             byrow = TRUE, 
+                             nrow = 2, 
+                             dimnames = list(c("happy", "sad"), c("happy", "sad")))
+
+
+initial_probs <- c(happy = 0.5, sad = 0.5)
+
+
+simulate_emotional_state_chain <- function(transition_matrix, initial_probs, steps) {
+  current_state <- sample(names(initial_probs), 1, prob = initial_probs)  # Choose initial state
+  
+  states <- character(steps)  
+  
+  for (i in 1:steps) {
+    states[i] <- current_state  
+    
+    
+    current_state <- ifelse(current_state == "happy", 
+                            sample(c("happy", "sad"), 1, prob = transition_matrix[1, ]),
+                            sample(c("happy", "sad"), 1, prob = transition_matrix[2, ]))
+  }
+  
+  return(states)
+}
+
+
+set.seed(42)  
+emotional_chain <- simulate_emotional_state_chain(transition_matrix, initial_probs, steps = 10)
+print(emotional_chain)
+
+
+```
+
+#Explaination
+
+#A Markov chain describes a sequence of events where the outcome of each event depends only on the current state and not on the previous history. At each step, you randomly transition to a new state based on probabilities determined by a transition matrix. These probabilities dictate the likelihood of moving from one state to another. The next move depends solely on your current position, making it a Markov process. 
